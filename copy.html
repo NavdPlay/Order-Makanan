@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Order Makanan</title>
+        <style>
+            .menu {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                margin-bottom: 50px;
+            }
+            .menuPic {
+                position: relative;
+                width: 300px;
+                height: 300px;
+                flex: 1;
+            }
+            .menuName {
+                flex: 1;
+            }
+            .addButton {
+                position: relative;
+                flex: 2;
+            }
+            .addButton * {
+                display: inline-block;
+            }
+            img {
+                position: absolute;
+                top: 50%;
+                transform: translate(0, -50%);
+                width: 225px;
+                height: 225px;
+            }
+            input[type=text] {
+                padding: 10px;
+                width: 100%;
+                font-size: 20pt;
+            }
+            .buttonTambah {
+                height: 70px;
+                border-radius: 5px;
+                font-size: 18pt;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                margin: 4px 2px;
+                cursor: pointer;
+                background-color: #4CAF50;
+            }
+            .buttonKurang {
+                position: relative;
+                left: 40px;
+                height: 70px;
+                border-radius: 5px;
+                font-size: 18pt;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                cursor: pointer;
+                background-color: #4CAF50;
+            }
+            .foodCounter {
+                position: absolute;
+                top: 20%;
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 30pt;
+                width: 35px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- BAKSO -->
+        <div class="menu">
+            <div class="menuPic">
+                <img src="bakso.jpg" />
+            </div>
+            <div class="menuName">
+                <h2>Bakso Atom Pedas</h2>
+                <h2>50.000</h2>
+            </div>
+            <div class="addButton">
+                <button class="buttonTambah" onclick="tambahBakso()">Tambah</button>
+                <label class="foodCounter" id="baksoCounter">0</label>
+                <button class="buttonKurang" onclick="kurangBakso()">Kurang</button>
+            </div>
+        </div>
+
+        <!-- SATE -->
+        <div class="menu">
+            <div class="menuPic">
+                <img src="sate.jpg" />
+            </div>
+            <div class="menuName">
+                <h2>Sate Ayam Madura</h2>
+                <h2>20.000</h2>
+            </div>
+            <div class="addButton">
+                <button class="buttonTambah" onclick="tambahSate()">Tambah</button>
+                <label class="foodCounter" id="sateCounter">0</label>
+                <button class="buttonKurang" onclick="kurangSate()">Kurang</button>
+            </div>
+        </div>
+
+        <!-- RAMEN -->
+        <div class="menu">
+            <div class="menuPic">
+                <img src="ramen.jpg" />
+            </div>
+            <div class="menuName">
+                <h2>Ramen Jepang</h2>
+                <h2>70.000</h2>
+            </div>
+            <div class="addButton">
+                <button class="buttonTambah" onclick="tambahRamen()">Tambah</button>
+                <label class="foodCounter" id="ramenCounter">0</label>
+                <button class="buttonKurang" onclick="kurangRamen()">Kurang</button>
+            </div>
+        </div>
+        <script>
+            var bakso = 0;
+            var sate = 0; 
+            var ramen = 0;
+
+            function tambahBakso() {
+                bakso++;
+                document.getElementById('baksoCounter').innerHTML = bakso;
+            }
+
+            function tambahSate() {
+                sate++;
+                document.getElementById('sateCounter').innerHTML = sate;
+            }
+
+            function tambahRamen() {
+                ramen++;
+                document.getElementById('ramenCounter').innerHTML = ramen;
+            }
+
+            function kurangBakso() {
+                if (bakso > 0) {
+                    bakso--;
+                    document.getElementById('baksoCounter').innerHTML = bakso;
+                }
+            }
+
+            function kurangSate() {
+                if (sate > 0) {
+                    sate--;
+                    document.getElementById('sateCounter').innerHTML = sate;
+                }
+            }
+
+            function kurangRamen() {
+                if (ramen > 0) {
+                    ramen--;
+                    document.getElementById('ramenCounter').innerHTML = ramen;
+                }
+            }
+        </script>
+    </body>
+</html>
