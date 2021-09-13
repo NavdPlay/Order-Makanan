@@ -463,7 +463,7 @@
                 function() {
                     if (method == 'cash') {
                         var saldo = document.getElementById('cash-input').value;
-                        document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + harga.toLocaleString();
+                        document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + (saldo - harga).toLocaleString();
                         document.getElementById('payment-result').style.display = 'block';
                     } else {
                         document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + 0;
