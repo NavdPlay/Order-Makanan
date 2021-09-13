@@ -6,6 +6,7 @@ Fitur dari app ini adalah berikut:
  - Menyediakan 3 menu yaitu bakso, sate dan ramen.
  - Mengatur jumlah dari masing-masing makanan yang diinginkan.
  - Menyediakan 2 metode pembayaran yaitu bayar tunai dan kartu kredit / debit.
+ - Disediakan input PIN jika memilih metode kartu untuk pembayaran (untuk saat ini bisa menggunakan 123456 sebagai PIN).
  
  Teknologi yang digunakan: 
  
