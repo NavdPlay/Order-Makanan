@@ -1,533 +1,535 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Makanan</title>
-        <script src="https://kit.fontawesome.com/d1d66d8c06.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <style>
-            html * {
-                padding: 0;
-                margin: 0;
-            }
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-            input[type=number] {
-                -moz-appearance: textfield;
-            }
-            .leftContainer {
-                margin-left: 8px;
-                display: inline-block;
-                width: 75%;
-            }
-            .menu {
-                display: flex;
-                align-items: center;
-                margin-bottom: 50px;
-            }
-            .menuPic {
-                position: relative;
-                width: 200px;
-                height: 200px;
-                flex: 1;
-            }
-            .menuName {
-                flex: 1;
-            }
-            .addButton {
-                position: relative;
-                flex: 2;
-            }
-            .addButton * {
-                display: inline-block;
-            }
-            img {
-                position: absolute;
-                top: 50%;
-                transform: translate(0, -50%);
-                width: 180px;
-                height: 180px;
-            }
-            input[type=text] {
-                padding: 10px;
-                width: 100%;
-                font-size: 20pt;
-            }
-            .buttonKurang {
-                height: 70px;
-                border-radius: 5px;
-                font-size: 18pt;
-                border: none;
-                color: white;
-                padding: 15px 32px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                margin: 4px 2px;
-                cursor: pointer;
-                background-color: #fd5000;
-            }
-            .buttonTambah {
-                position: relative;
-                left: 40px;
-                height: 70px;
-                border-radius: 5px;
-                font-size: 18pt;
-                border: none;
-                color: white;
-                padding: 15px 32px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                cursor: pointer;
-                background-color: #4CAF50;
-            }
-            .foodCounter {
-                position: absolute;
-                top: 20%;
-                text-align: center;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 30pt;
-                width: 35px;
-            }
-            .containerRight {
-                margin-top: 8px; 
-                float: right;
-                width: 24%;
-            }
-            .rightText {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 25pt;
-            }
-            .payment-button {
-                width: 200px;
-                height: 75px;
-                border-radius: 10px;
-                border: none;
-                background-color: #4caf50;
-                color: #ffffff;
-                font-size: 19px;
-                letter-spacing: 1.5px;
-                cursor: pointer;
-                transition: all 0.3s;
-            }
-            .payment-button:hover {
-                transform: scale(1.1);
-                box-shadow: 0 0 10px 1px #888888;
-            }
-            .number-button {
-                transition: 0.3s;
-            }
-            .number-button:hover {
-                transform: scale(1.05);
-                box-shadow: 0 0 15px 1px #888888;
-            }
-            #overlay {
-                display: none;
-                position: fixed;
-                height: 100%;
-                width: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
-                z-index: 1;
-                font-family: Arial, Helvetica, sans-serif;
-                justify-content: space-evenly;
-                align-items: center;
-            }
-            .overlay-container {
-                position: relative;
-                background-color: #ffffff;
-                width: 40%;
-                height: 100%;
-                margin: 0 auto;
-            }
-            .overlay-heading {
-                position: relative;
-                top: 20px;
-                width: 100%;
-                display: block;
-                text-align: center;
-            }
-            .metode-container {
-                width: 100%;
-            }
-            .metode {
-                display: block;
-                position: relative;
-                border: 1.5px solid #5f5f5f;
-                margin: 30px auto;
-                padding: 15px;
-                border-radius: 15px;
-                height: 55px;
-                width: 60%;
-                cursor: pointer;
-                transition: all 0.3s;
-            }
-            .symbol {
-                font-size: 45px;
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            .metode-desc {
-                margin-top: 14px;
-            }
-            .metode:hover, .selected {
-                border-width: 2px;
-                transform: scale(1.1);
-                box-shadow: 0 0 18px 1px #888888;
-            }
-            .contents {
-                position: absolute;
-                top: 10%;
-                left: 25%;
-            }
-            .fa-bitcoin {
-                font-size: 52px;
-            }
-            .fa-arrow-left {
-                z-index: 2;
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                width: 30px;
-                height: 30px;
-                color: black;
-                font-size: 35px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-            .selected {
-                border: 2px solid #0f6fff;
-                background-color: #6ea8ff;
-            }
-            .confirm-container {
-                position: relative;
-                margin: 0 auto;
-                top: 30px;
-                width: 50%;
-            }
-            .confirm-button {
-                position: absolute;
-                top: 50px;
-                left: 50%;
-                transform: translate(-50%, 0);
-                display: none;
-                width: 77%;
-                border: none;
-                background-color: #4CAF50;
-                border-radius: 7px;
-                padding: 10px;
-                color: #ffffff;
-                font-size: 13px;
-                letter-spacing: 1.5px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-            .confirm-container button:hover {
-                box-shadow: 0 0 10px 1px #888888;
-            }
-            .pin-input, .cash-input {
-                border-radius: 3px;
-                border: 1px solid black;
-                padding: 0 10px;
-                display: none;
-                position: absolute;
-                width: 80%;
-                font-size: 17px;
-                height: 35px;
-                top: 0;
-                left: 50%;
-                transform: translate(-50.1%, 0);
-                outline: none;
-            }
-            .popup-warning {
-                display: none;
-                position: relative;
-                left: 50%;
-                top: 50px;
-                transform: translateX(-50%);
-                transform: translate(-50%, 0);
-                width: 90%;
-                height: 35px;
-            }
-            .popup-warning p {
-                position: absolute;
-                color: red;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 80%;
-            }
-            .container-harga {
-                text-align: center;
-                position: relative;
-                width: 60%;
-                margin: 0 auto;
-            }
-            .payment-result {
-                display: none;
-                width: 70%;
-                position: relative;
-                top: 150px;
-                margin: 0 auto;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="overlay">
-            <div class="overlay-container">
-                <div class="return-button" onclick="off()">
-                    <i class="fas fa-arrow-left"></i>
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Order Makanan</title>
+            <script src="https://kit.fontawesome.com/d1d66d8c06.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <style>
+                html * {
+                    padding: 0;
+                    margin: 0;
+                }
+                input::-webkit-outer-spin-button,
+                input::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+                input[type=number] {
+                    -moz-appearance: textfield;
+                }
+                .leftContainer {
+                    margin-left: 8px;
+                    display: inline-block;
+                    width: 75%;
+                }
+                .menu {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 50px;
+                }
+                .menuPic {
+                    position: relative;
+                    width: 200px;
+                    height: 200px;
+                    flex: 1;
+                }
+                .menuName {
+                    flex: 1;
+                }
+                .addButton {
+                    position: relative;
+                    flex: 2;
+                }
+                .addButton * {
+                    display: inline-block;
+                }
+                img {
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(0, -50%);
+                    width: 180px;
+                    height: 180px;
+                }
+                input[type=text] {
+                    padding: 10px;
+                    width: 100%;
+                    font-size: 20pt;
+                }
+                .buttonKurang {
+                    height: 70px;
+                    border-radius: 5px;
+                    font-size: 18pt;
+                    border: none;
+                    color: white;
+                    padding: 15px 32px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                    background-color: #fd5000;
+                }
+                .buttonTambah {
+                    position: relative;
+                    left: 40px;
+                    height: 70px;
+                    border-radius: 5px;
+                    font-size: 18pt;
+                    border: none;
+                    color: white;
+                    padding: 15px 32px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    cursor: pointer;
+                    background-color: #4CAF50;
+                }
+                .foodCounter {
+                    position: absolute;
+                    top: 20%;
+                    text-align: center;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 30pt;
+                    width: 35px;
+                }
+                .containerRight {
+                    margin-top: 8px; 
+                    float: right;
+                    width: 24%;
+                }
+                .rightText {
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 25pt;
+                }
+                .payment-button {
+                    width: 200px;
+                    height: 75px;
+                    border-radius: 10px;
+                    border: none;
+                    background-color: #4caf50;
+                    color: #ffffff;
+                    font-size: 19px;
+                    letter-spacing: 1.5px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                .payment-button:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 0 10px 1px #888888;
+                }
+                .number-button {
+                    transition: 0.3s;
+                }
+                .number-button:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 0 15px 1px #888888;
+                }
+                #overlay {
+                    display: none;
+                    position: fixed;
+                    height: 100%;
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 1;
+                    font-family: Arial, Helvetica, sans-serif;
+                    justify-content: space-evenly;
+                    align-items: center;
+                }
+                .overlay-container {
+                    position: relative;
+                    background-color: #ffffff;
+                    width: 40%;
+                    height: 100%;
+                    margin: 0 auto;
+                }
+                .overlay-heading {
+                    position: relative;
+                    top: 20px;
+                    width: 100%;
+                    display: block;
+                    text-align: center;
+                }
+                .metode-container {
+                    width: 100%;
+                }
+                .metode {
+                    display: block;
+                    position: relative;
+                    border: 1.5px solid #5f5f5f;
+                    margin: 30px auto;
+                    padding: 15px;
+                    border-radius: 15px;
+                    height: 55px;
+                    width: 60%;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                .symbol {
+                    font-size: 45px;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+                .metode-desc {
+                    margin-top: 14px;
+                }
+                .metode:hover, .selected {
+                    border-width: 2px;
+                    transform: scale(1.1);
+                    box-shadow: 0 0 18px 1px #888888;
+                }
+                .contents {
+                    position: absolute;
+                    top: 10%;
+                    left: 25%;
+                }
+                .fa-bitcoin {
+                    font-size: 52px;
+                }
+                .fa-arrow-left {
+                    z-index: 2;
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    width: 30px;
+                    height: 30px;
+                    color: black;
+                    font-size: 35px;
+                    cursor: pointer;
+                    transition: 0.3s;
+                }
+                .selected {
+                    border: 2px solid #0f6fff;
+                    background-color: #6ea8ff;
+                }
+                .confirm-container {
+                    position: relative;
+                    margin: 0 auto;
+                    top: 30px;
+                    width: 50%;
+                }
+                .confirm-button {
+                    position: absolute;
+                    top: 50px;
+                    left: 50%;
+                    transform: translate(-50%, 0);
+                    display: none;
+                    width: 77%;
+                    border: none;
+                    background-color: #4CAF50;
+                    border-radius: 7px;
+                    padding: 10px;
+                    color: #ffffff;
+                    font-size: 13px;
+                    letter-spacing: 1.5px;
+                    cursor: pointer;
+                    transition: 0.3s;
+                }
+                .confirm-container button:hover {
+                    box-shadow: 0 0 10px 1px #888888;
+                }
+                .pin-input, .cash-input {
+                    border-radius: 3px;
+                    border: 1px solid black;
+                    padding: 0 10px;
+                    display: none;
+                    position: absolute;
+                    width: 80%;
+                    font-size: 17px;
+                    height: 35px;
+                    top: 0;
+                    left: 50%;
+                    transform: translate(-50.1%, 0);
+                    outline: none;
+                }
+                .popup-warning {
+                    display: none;
+                    position: relative;
+                    left: 50%;
+                    top: 50px;
+                    transform: translateX(-50%);
+                    transform: translate(-50%, 0);
+                    width: 90%;
+                    height: 35px;
+                }
+                .popup-warning p {
+                    position: absolute;
+                    color: red;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 80%;
+                }
+                .container-harga {
+                    text-align: center;
+                    position: relative;
+                    width: 60%;
+                    margin: 0 auto;
+                }
+                .payment-result {
+                    display: none;
+                    width: 70%;
+                    position: relative;
+                    top: 150px;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="overlay">
+                <div class="overlay-container">
+                    <div class="return-button" onclick="off()">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <div class="overlay-heading">
+                        <h1>Pilih Metode Pembayaran</h1>
+                    </div>
+                    <br>
+                    <div class="metode-container">
+                        <div class="metode" data-value="cash">
+                            <div class="symbol">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="contents">
+                                <div class="metode-title">
+                                    <h2>Cash</h2>
+                                </div>
+                                <div class="metode-desc">
+                                    <p>Bayar dengan tunai</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metode" data-value="card">
+                            <div class="symbol">
+                                <i class="far fa-credit-card"></i>
+                            </div>
+                            <div class="contents">
+                                <div class="metode-title">
+                                    <h2>Kartu Debit / Kredit</h2>
+                                </div>
+                                <div class="metode-desc">
+                                    <p>Bayar dengan kartu</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-harga">
+                        <h1 class="harga" id="harga">Harga: Rp 0</h1>
+                    </div>
+                    <div class="confirm-container">
+                        <div class="popup-warning" id="popup-warning">
+                            <p>PIN Tidak Sesuai! harap coba lagi</p>
+                        </div>
+                        <input onfocus="this.style.border = '2px solid yellow'" type="number" id="pin-input" class="pin-input" placeholder="Masukkan PIN anda">
+                        <input onfocus="this.style.border = '2px solid yellow'" type="number" id="cash-input" class="cash-input" placeholder="Masukkan jumlah uang anda">
+                        <button id="confirm-button" class="confirm-button">Konfirmasi Pembayaran</button>
+                    </div>
+                    <div class="payment-result" id="payment-result">
+                        <h1 id="kembalian">Kembalian: Rp 0</h1>
+                        <h1>Pembayaran berhasil!</h1>
+                    </div>
                 </div>
-                <div class="overlay-heading">
-                    <h1>Pilih Metode Pembayaran</h1>
+            </div>
+            <div class="leftContainer">
+                <!-- BAKSO -->
+                <div class="menu">
+                    <div class="menuPic">
+                        <img src="bakso.jpg" />
+                    </div>
+                    <div class="menuName">
+                        <h2>Bakso Atom Pedas</h2>
+                        <h2>50,000</h2>
+                    </div>
+                    <div class="addButton">
+                        <button class="buttonKurang number-button" onclick="kurangBakso()">Kurang</button>
+                        <label class="foodCounter" id="baksoCounter">0</label>
+                        <button class="buttonTambah number-button" onclick="tambahBakso()">Tambah</button>
+                    </div>
                 </div>
+        
+                <!-- SATE -->
+                <div class="menu">
+                    <div class="menuPic">
+                        <img src="sate.jpg" />
+                    </div>
+                    <div class="menuName">
+                        <h2>Sate Ayam Madura</h2>
+                        <h2>20,000</h2>
+                    </div>
+                    <div class="addButton">
+                        <button class="buttonKurang number-button" onclick="kurangSate()">Kurang</button>
+                        <label class="foodCounter" id="sateCounter">0</label>
+                        <button class="buttonTambah number-button" onclick="tambahSate()">Tambah</button>
+                    </div>
+                </div>
+        
+                <!-- RAMEN -->
+                <div class="menu">
+                    <div class="menuPic">
+                        <img src="ramen.jpg" />
+                    </div>
+                    <div class="menuName">
+                        <h2>Ramen Jepang</h2>
+                        <h2>70,000</h2>
+                    </div>
+                    <div class="addButton">
+                        <button class="buttonKurang number-button" onclick="kurangRamen()">Kurang</button>
+                        <label class="foodCounter" id="ramenCounter">0</label>
+                        <button class="buttonTambah number-button" onclick="tambahRamen()">Tambah</button>
+                    </div>
+                </div>
+            </div>
+            <div class="containerRight">
+                <label class="rightText">Bakso: </label>
+                <label class="rightText" id="rightBaksoCounter">0</label>
                 <br>
-                <div class="metode-container">
-                    <div class="metode" data-value="cash">
-                        <div class="symbol">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </div>
-                        <div class="contents">
-                            <div class="metode-title">
-                                <h2>Cash</h2>
-                            </div>
-                            <div class="metode-desc">
-                                <p>Bayar dengan tunai</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="metode" data-value="card">
-                        <div class="symbol">
-                            <i class="far fa-credit-card"></i>
-                        </div>
-                        <div class="contents">
-                            <div class="metode-title">
-                                <h2>Kartu Debit / Kredit</h2>
-                            </div>
-                            <div class="metode-desc">
-                                <p>Bayar dengan kartu</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-harga">
-                    <h1 class="harga" id="harga">Harga: Rp 0</h1>
-                </div>
-                <div class="confirm-container">
-                    <div class="popup-warning" id="popup-warning">
-                        <p>PIN Tidak Sesuai! harap coba lagi</p>
-                    </div>
-                    <input onfocus="this.style.border = '2px solid yellow'" type="number" id="pin-input" class="pin-input" placeholder="Masukkan PIN anda">
-                    <input onfocus="this.style.border = '2px solid yellow'" type="number" id="cash-input" class="cash-input" placeholder="Masukkan jumlah uang anda">
-                    <button id="confirm-button" class="confirm-button">Konfirmasi Pembayaran</button>
-                </div>
-                <div class="payment-result" id="payment-result">
-                    <h1 id="kembalian">Kembalian: Rp 0</h1>
-                    <h1>Pembayaran berhasil!</h1>
-                </div>
+                <label class="rightText">Sate: </label>
+                <label class="rightText" id="rightSateCounter">0</label>
+                <br>
+                <label class="rightText">Ramen: </label>
+                <label class="rightText" id="rightRamenCounter">0</label>
+                <br><br>
+                <label class="rightText">Total harga: </label>
+                <br>
+                <label class="rightText" id="totalPrice">Rp 0</label>
+                <br>
+                <br>
+                <button class="payment-button" onclick="on()">Lanjut Ke Pembayaran</button>
             </div>
-        </div>
-        <div class="leftContainer">
-            <!-- BAKSO -->
-            <div class="menu">
-                <div class="menuPic">
-                    <img src="bakso.jpg" />
-                </div>
-                <div class="menuName">
-                    <h2>Bakso Atom Pedas</h2>
-                    <h2>50,000</h2>
-                </div>
-                <div class="addButton">
-                    <button class="buttonKurang number-button" onclick="kurangBakso()">Kurang</button>
-                    <label class="foodCounter" id="baksoCounter">0</label>
-                    <button class="buttonTambah number-button" onclick="tambahBakso()">Tambah</button>
-                </div>
-            </div>
-    
-            <!-- SATE -->
-            <div class="menu">
-                <div class="menuPic">
-                    <img src="sate.jpg" />
-                </div>
-                <div class="menuName">
-                    <h2>Sate Ayam Madura</h2>
-                    <h2>20,000</h2>
-                </div>
-                <div class="addButton">
-                    <button class="buttonKurang number-button" onclick="kurangSate()">Kurang</button>
-                    <label class="foodCounter" id="sateCounter">0</label>
-                    <button class="buttonTambah number-button" onclick="tambahSate()">Tambah</button>
-                </div>
-            </div>
-    
-            <!-- RAMEN -->
-            <div class="menu">
-                <div class="menuPic">
-                    <img src="ramen.jpg" />
-                </div>
-                <div class="menuName">
-                    <h2>Ramen Jepang</h2>
-                    <h2>70,000</h2>
-                </div>
-                <div class="addButton">
-                    <button class="buttonKurang number-button" onclick="kurangRamen()">Kurang</button>
-                    <label class="foodCounter" id="ramenCounter">0</label>
-                    <button class="buttonTambah number-button" onclick="tambahRamen()">Tambah</button>
-                </div>
-            </div>
-        </div>
-        <div class="containerRight">
-            <label class="rightText">Bakso: </label>
-            <label class="rightText" id="rightBaksoCounter">0</label>
-            <br>
-            <label class="rightText">Sate: </label>
-            <label class="rightText" id="rightSateCounter">0</label>
-            <br>
-            <label class="rightText">Ramen: </label>
-            <label class="rightText" id="rightRamenCounter">0</label>
-            <br><br>
-            <label class="rightText">Total harga: </label>
-            <br>
-            <label class="rightText" id="totalPrice">Rp 0</label>
-            <br>
-            <br>
-            <button class="payment-button" onclick="on()">Lanjut Ke Pembayaran</button>
-        </div>
-        <script>
-            $('.metode-container .metode').click(
-                function(){
-                    method = $(this).attr('data-value');
-                    document.getElementById('confirm-button').style.display = 'none';
-                    document.getElementById('popup-warning').style.display = 'none';
-                    document.getElementById('confirm-button').style.top = '50px';
-                    document.getElementById('pin-input').style.border = '2px solid black';
-                    document.getElementById('cash-input').style.border = '2px solid black';
-                    $(this).parent().find('.metode').removeClass('selected');
-                    $(this).addClass('selected');
-                    if ($(this).attr('data-value') == 'card') {
-                        document.getElementById('pin-input').style.display = 'block';
-                        document.getElementById('cash-input').style.display = 'none';
-                    } else {
-                        document.getElementById('pin-input').style.display = 'none';
-                        document.getElementById('cash-input').style.display = 'block';
-                        document.getElementById('cash-input').style.width = '90%';
-                    }
-                }
-            );
-            $('#pin-input').keyup(
-                function(){
-                    var el = document.getElementById('pin-input');
-                    if(el.value != 123456) {
-                        document.getElementById('pin-input').style.border = '2px solid red';
-                        document.getElementById('popup-warning').style.display = 'block';
-                        document.getElementById('popup-warning').innerHTML = 'PIN Tidak Sesuai! harap coba lagi';
-                        document.getElementById('popup-warning').style.color = 'red';
-                        document.getElementById('confirm-button').style.top = '97px';
+            <script>
+                var method = '';
+                var bakso = 0;
+                var sate = 0;
+                var ramen = 0;
+                var harga = 0;
+
+                $('.metode-container .metode').click(
+                    function(){
+                        method = $(this).attr('data-value');
+                        document.getElementById('payment-result').style.display = 'none';
                         document.getElementById('confirm-button').style.display = 'none';
-                    } else {
-                        document.getElementById('pin-input').style.border = '2px solid #4caf50';
                         document.getElementById('popup-warning').style.display = 'none';
                         document.getElementById('confirm-button').style.top = '50px';
-                        document.getElementById('confirm-button').style.display = 'block';
+                        document.getElementById('pin-input').style.border = '2px solid black';
+                        document.getElementById('cash-input').style.border = '2px solid black';
+                        $(this).parent().find('.metode').removeClass('selected');
+                        $(this).addClass('selected');
+                        if ($(this).attr('data-value') == 'card') {
+                            document.getElementById('pin-input').style.display = 'block';
+                            document.getElementById('cash-input').style.display = 'none';
+                        } else {
+                            document.getElementById('pin-input').style.display = 'none';
+                            document.getElementById('cash-input').style.display = 'block';
+                            document.getElementById('cash-input').style.width = '90%';
+                        }
                     }
-                }
-            );
-
-            $('#cash-input').keyup(
-                function(){
-                    var el = document.getElementById('cash-input');
-                    if(el.value < harga) {
-                        document.getElementById('cash-input').style.border = '2px solid red';
-                        document.getElementById('popup-warning').style.display = 'block';
-                        document.getElementById('popup-warning').innerHTML = 'Uang anda kurang!';
-                        document.getElementById('popup-warning').style.color = 'red';
-                        document.getElementById('confirm-button').style.top = '97px';
-                        document.getElementById('confirm-button').style.display = 'none';
-                    } else {
-                        document.getElementById('cash-input').style.border = '2px solid #4caf50';
-                        document.getElementById('popup-warning').style.display = 'none';
-                        document.getElementById('confirm-button').style.top = '50px';
-                        document.getElementById('confirm-button').style.display = 'block';
+                );
+                $('#pin-input').keyup(
+                    function(){
+                        var el = document.getElementById('pin-input');
+                        if(el.value != 123456) {
+                            document.getElementById('pin-input').style.border = '2px solid red';
+                            document.getElementById('popup-warning').style.display = 'block';
+                            document.getElementById('popup-warning').innerHTML = 'PIN Tidak Sesuai! harap coba lagi';
+                            document.getElementById('popup-warning').style.color = 'red';
+                            document.getElementById('confirm-button').style.top = '97px';
+                            document.getElementById('confirm-button').style.display = 'none';
+                        } else {
+                            document.getElementById('pin-input').style.border = '2px solid #4caf50';
+                            document.getElementById('popup-warning').style.display = 'none';
+                            document.getElementById('confirm-button').style.top = '50px';
+                            document.getElementById('confirm-button').style.display = 'block';
+                        }
                     }
-                }
-            );
+                );
 
-            $('.confirm-button').click(
-                function() {
-                    if (method == 'cash') {
-                        var saldo = document.getElementById('cash-input').value;
-                        document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + (saldo - harga).toLocaleString();
-                        document.getElementById('payment-result').style.display = 'block';
-                    } else {
-                        document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + 0;
-                        document.getElementById('payment-result').style.display = 'block';
+                $('#cash-input').keyup(
+                    function(){
+                        var el = document.getElementById('cash-input');
+                        if(el.value < harga) {
+                            document.getElementById('cash-input').style.border = '2px solid red';
+                            document.getElementById('popup-warning').style.display = 'block';
+                            document.getElementById('popup-warning').innerHTML = 'Uang anda kurang!';
+                            document.getElementById('popup-warning').style.color = 'red';
+                            document.getElementById('confirm-button').style.top = '97px';
+                            document.getElementById('confirm-button').style.display = 'none';
+                        } else {
+                            document.getElementById('cash-input').style.border = '2px solid #4caf50';
+                            document.getElementById('popup-warning').style.display = 'none';
+                            document.getElementById('confirm-button').style.top = '50px';
+                            document.getElementById('confirm-button').style.display = 'block';
+                        }
                     }
-                }
-            )
-            var method = '';
-            var bakso = 0;
-            var sate = 0; 
-            var ramen = 0;
-            var harga = 0;
+                );
 
-            function on() {
-                document.getElementById('overlay').style.display = 'block';
-            }
-            function off() {
-                document.getElementById('overlay').style.display = 'none';
-            }
-            function refreshHarga() {
-                document.getElementById('rightBaksoCounter').innerHTML = bakso;
-                document.getElementById('rightSateCounter').innerHTML = sate;
-                document.getElementById('rightRamenCounter').innerHTML = ramen;
-                var sum = (bakso * 50000) + (sate * 20000) + (ramen * 70000);
-                document.getElementById('totalPrice').innerHTML = sum.toLocaleString();
-                document.getElementById('harga').innerHTML = 'Harga: ' + sum.toLocaleString();
-                harga = sum;
-            }
-            function tambahBakso() {
-                bakso++;
-                document.getElementById('baksoCounter').innerHTML = bakso;
-                refreshHarga();
-            }
-            function tambahSate() {
-                sate++;
-                document.getElementById('sateCounter').innerHTML = sate;
-                refreshHarga();
-            }
-            function tambahRamen() {
-                ramen++;
-                document.getElementById('ramenCounter').innerHTML = ramen;
-                refreshHarga();
-            }
-            function kurangBakso() {
-                if (bakso > 0) {
-                    bakso--;
+                $('.confirm-button').click(
+                    function() {
+                        if (method == 'cash') {
+                            var saldo = document.getElementById('cash-input').value;
+                            document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + (saldo - harga).toLocaleString();
+                            document.getElementById('payment-result').style.display = 'block';
+                        } else {
+                            document.getElementById('kembalian').innerHTML = 'Kembalian: Rp ' + 0;
+                            document.getElementById('payment-result').style.display = 'block';
+                        }
+                    }
+                )
+
+                function on() {
+                    document.getElementById('overlay').style.display = 'block';
+                }
+                function off() {
+                    document.getElementById('overlay').style.display = 'none';
+                }
+                function refreshHarga() {
+                    document.getElementById('rightBaksoCounter').innerHTML = bakso;
+                    document.getElementById('rightSateCounter').innerHTML = sate;
+                    document.getElementById('rightRamenCounter').innerHTML = ramen;
+                    var sum = (bakso * 50000) + (sate * 20000) + (ramen * 70000);
+                    document.getElementById('totalPrice').innerHTML = sum.toLocaleString();
+                    document.getElementById('harga').innerHTML = 'Harga: ' + sum.toLocaleString();
+                    harga = sum;
+                }
+                function tambahBakso() {
+                    bakso++;
                     document.getElementById('baksoCounter').innerHTML = bakso;
                     refreshHarga();
                 }
-            }
-            function kurangSate() {
-                if (sate > 0) {
-                    sate--;
+                function tambahSate() {
+                    sate++;
                     document.getElementById('sateCounter').innerHTML = sate;
                     refreshHarga();
                 }
-            }
-            function kurangRamen() {
-                if (ramen > 0) {
-                    ramen--;
+                function tambahRamen() {
+                    ramen++;
                     document.getElementById('ramenCounter').innerHTML = ramen;
                     refreshHarga();
                 }
-            }
-        </script>
-    </body>
-</html>
+                function kurangBakso() {
+                    if (bakso > 0) {
+                        bakso--;
+                        document.getElementById('baksoCounter').innerHTML = bakso;
+                        refreshHarga();
+                    }
+                }
+                function kurangSate() {
+                    if (sate > 0) {
+                        sate--;
+                        document.getElementById('sateCounter').innerHTML = sate;
+                        refreshHarga();
+                    }
+                }
+                function kurangRamen() {
+                    if (ramen > 0) {
+                        ramen--;
+                        document.getElementById('ramenCounter').innerHTML = ramen;
+                        refreshHarga();
+                    }
+                }
+            </script>
+        </body>
+    </html>
